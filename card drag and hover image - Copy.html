@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="fa">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>کارت‌های قابل دراگ و دراپ</title>
+  <!-- Font Vazir -->
+  <style>
+    @font-face {
+      font-family: 'Vazir';
+      src: url('https://cdn.fontcdn.ir/Font/Persian/Vazir/Vazir.eot');
+      src: url('https://cdn.fontcdn.ir/Font/Persian/Vazir/Vazir.eot?#iefix') format('embedded-opentype'),
+           url('https://cdn.fontcdn.ir/Font/Persian/Vazir/Vazir.woff2') format('woff2'),
+           url('https://cdn.fontcdn.ir/Font/Persian/Vazir/Vazir.woff') format('woff'),
+           url('https://cdn.fontcdn.ir/Font/Persian/Vazir/Vazir.ttf') format('truetype');
+      font-weight: normal;
+      font-style: normal;
+    }
+
+    /* Global Styles */
+    body {
+      background-color: #f9f9f9;
+      direction: rtl;
+      padding: 20px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      font-family: 'Vazir', Tahoma, sans-serif;
+      transition: background-color 0.3s ease, color 0.3s ease;
+    }
+
+    /* Dark Mode Styles */
+    .dark-mode {
+      background-color: #121212;
+      color: #ffffff;
+    }
+    .dark-mode .card {
+      background-color: #1e1e1e;
+      color: #ffffff;
+    }
+    .dark-mode .card-title {
+      color: #ffffff;
+    }
+    .dark-mode .card-text {
+      color: #cccccc;
+    }
+    .dark-mode .btn {
+      background-color: #bb86fc;
+    }
+    .dark-mode .btn:hover {
+      background-color: #9c5ccf;
+    }
+
+    /* Card Container */
+    .card-container {
+      display: flex;
+      gap: 20px;
+    }
+
+    /* Card Styles */
+    .card {
+      width: 18rem;
+      background-color: #ffffff;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      overflow: hidden;
+      text-align: right;
+      position: relative;
+      cursor: grab;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .card:hover {
+      transform: scale(1.05);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+    }
+    .card.dragging {
+      opacity: 0.5;
+    }
+
+    /* Image Container */
+    .card-image-container {
+      position: relative;
+      width: 100%;
+      height: 200px;
+      overflow: hidden;
+      border-top-left-radius: 12px;
+      border-top-right-radius: 12px;
+    }
+
+    /* Main Image */
+    .card-img-top {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      opacity: 0;
+      transition: opacity 0.5s ease;
+    }
+
+    /* Lazy Loading Images */
+    .lazy {
+      opacity: 0;
+      transition: opacity 0.5s ease;
+    }
+    .lazy.loaded {
+      opacity: 1;
+    }
+
+    /* Loading Spinner */
+    .loading-spinner {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 30px;
+      height: 30px;
+      border: 4px solid #f3f3f3;
+      border-top: 4px solid #3498db;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      z-index: 10;
+    }
+
+    /* Return Button */
+    .return-button {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      background-color: rgba(0, 0, 0, 0.6);
+      color: white;
+      border: none;
+      border-radius: 50%;
+      width: 30px;
+      height: 30px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      z-index: 15;
+    }
+    .card-image-container:hover .return-button {
+      opacity: 1;
+    }
+
+    /* Tooltip Styles */
+    .tooltip {
+      position: relative;
+      display: inline-block;
+    }
+    .tooltip .tooltiptext {
+      visibility: hidden;
+      width: 120px;
+      background-color: #333;
+      color: #fff;
+      text-align: center;
+      border-radius: 6px;
+      padding: 5px;
+      position: absolute;
+      z-index: 1;
+      bottom: 125%;
+      left: 50%;
+      transform: translateX(-50%);
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+    .tooltip:hover .tooltiptext {
+      visibility: visible;
+      opacity: 1;
+    }
+
+    /* Card Body */
+    .card-body {
+      padding: 16px;
+    }
+    .card-title {
+      font-size: 1.25rem;
+      font-weight: bold;
+      margin-bottom: 10px;
+      color: #333;
+    }
+    .card-text {
+      font-size: 0.875rem;
+      color: #666;
+      line-height: 1.6;
+      margin-bottom: 15px;
+    }
+
+    /* Button Styles */
+    .btn {
+      display: inline-block;
+      padding: 10px 16px;
+      font-size: 0.875rem;
+      font-weight: bold;
+      color: #fff;
+      background-color: #3b82f6;
+      border: none;
+      border-radius: 8px;
+      text-decoration: none;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+    .btn:hover {
+      background-color: #2563eb;
+    }
+
+    /* Spinner Animation */
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Dark Mode Toggle Button -->
+  <button id="darkModeToggle" class="btn" style="position: absolute; top: 20px; right: 20px;">حالت تاریک</button>
+
+  <!-- Counter Display -->
+  <p style="position: absolute; top: 60px; right: 20px;">تعداد جابجایی: <span id="dragCounter">0</span></p>
+
+  <!-- Audio Element for Click Sound -->
+  <audio id="clickSound" src="https://www.soundjay.com/button/beep-07.wav" preload="auto"></audio>
+
+  <!-- Card Container -->
+  <div class="card-container" id="cardContainer">
+    <!-- Card 1 -->
+    <div class="card" draggable="true" id="card1">
+      <div class="card-image-container">
+        <!-- Return Button -->
+        <button class="return-button" onclick="restoreImage('cardImage1', 'https://images.unsplash.com/photo-1744274800188-4f3159c408cf?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D')">
+          &#8630;
+        </button>
+        <!-- Loading Spinner -->
+        <div class="loading-spinner"></div>
+        <!-- Main Image (Lazy Loaded) -->
+        <img data-src="https://images.unsplash.com/photo-1744274800188-4f3159c408cf?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" 
+             class="card-img-top lazy" alt="تصویر نمونه" onload="showImage(this)">
+      </div>
+      <div class="card-body">
+        <h5 class="card-title">عنوان کارت ۱</h5>
+        <p class="card-text">این متنی است که به عنوان توضیح برای کارت استفاده می‌شود و می‌تواند شامل اطلاعات بیشتری باشد.</p>
+        <div class="tooltip">
+          <a href="#" class="btn" id="changeImageButton1">برو به جایی</a>
+          <span class="tooltiptext">تصویر را تغییر دهید</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Card 2 -->
+    <div class="card" draggable="true" id="card2">
+      <div class="card-image-container">
+        <!-- Return Button -->
+        <button class="return-button" onclick="restoreImage('cardImage2', 'https://images.unsplash.com/photo-1744274800188-4f3159c408cf?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D')">
+          &#8630;
+        </button>
+        <!-- Loading Spinner -->
+        <div class="loading-spinner"></div>
+        <!-- Main Image (Lazy Loaded) -->
+        <img data-src="https://images.unsplash.com/photo-1744274800188-4f3159c408cf?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" 
+             class="card-img-top lazy" alt="تصویر نمونه" onload="showImage(this)">
+      </div>
+      <div class="card-body">
+        <h5 class="card-title">عنوان کارت ۲</h5>
+        <p class="card-text">این متنی است که به عنوان توضیح برای کارت استفاده می‌شود و می‌تواند شامل اطلاعات بیشتری باشد.</p>
+        <div class="tooltip">
+          <a href="#" class="btn" id="changeImageButton2">برو به جایی</a>
+          <span class="tooltiptext">تصویر را تغییر دهید</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Play Click Sound
+    const clickSound = document.getElementById('clickSound');
+
+    function playSound() {
+      clickSound.currentTime = 0;
+      clickSound.play();
+    }
+
+    // Show Image After Loading
+    function showImage(image) {
+      const spinner = image.parentElement.querySelector('.loading-spinner');
+      if (spinner) spinner.style.display = 'none';
+      image.classList.add('loaded');
+    }
+
+    // Restore Original Image
+    function restoreImage(imageId, originalImageUrl) {
+      const image = document.getElementById(imageId);
+      image.src = originalImageUrl;
+      image.onload = () => showImage(image);
+      playSound();
+    }
+
+    // Setup Hover for "Go somewhere" Button
+    function setupCardHover(buttonId, imageId, newImageUrl) {
+      document.getElementById(buttonId).addEventListener('mouseover', () => {
+        const image = document.getElementById(imageId);
+        const spinner = image.parentElement.querySelector('.loading-spinner');
+        spinner.style.display = 'block';
+        image.src = newImageUrl;
+        image.onload = () => spinner.style.display = 'none';
+        playSound();
+      });
+    }
+
+    // Setup Hover for Both Cards
+    setupCardHover('changeImageButton1', 'cardImage1', 'https://oyster.ignimgs.com/mediawiki/apis.ign.com/kingdom-come-deliverance-2/1/19/KCD2_Gambit_Speak_to_Vavak.png?width=814');
+    setupCardHover('changeImageButton2', 'cardImage2', 'https://oyster.ignimgs.com/mediawiki/apis.ign.com/kingdom-come-deliverance-2/4/45/KCD2_Gambit_Sigismund.png?width=814');
+
+    // Drag and Drop Functionality
+    const cardContainer = document.getElementById('cardContainer');
+    let draggedCard = null;
+
+    cardContainer.addEventListener('dragstart', (e) => {
+      draggedCard = e.target.closest('.card');
+      if (draggedCard) setTimeout(() => draggedCard.classList.add('dragging'), 0);
+      playSound();
+    });
+
+    cardContainer.addEventListener('dragover', (e) => {
+      e.preventDefault();
+      const afterElement = getDragAfterElement(cardContainer, e.clientY);
+      if (afterElement == null) cardContainer.appendChild(draggedCard);
+      else cardContainer.insertBefore(draggedCard, afterElement);
+    });
+
+    cardContainer.addEventListener('dragend', () => {
+      if (draggedCard) {
+        draggedCard.classList.remove('dragging');
+        draggedCard = null;
+        saveCardOrder();
+        updateDragCounter();
+        playSound();
+      }
+    });
+
+    // Helper Function to Find Drop Position
+    function getDragAfterElement(container, y) {
+      const draggableCards = [...container.querySelectorAll('.card:not(.dragging)')];
+      return draggableCards.reduce((closest, child) => {
+        const box = child.getBoundingClientRect();
+        const offset = y - box.top - box.height / 2;
+        return offset < 0 && offset > closest.offset ? { offset, element: child } : closest;
+      }, { offset: Number.NEGATIVE_INFINITY }).element;
+    }
+
+    // Save Card Order to Local Storage
+    function saveCardOrder() {
+      const cards = Array.from(cardContainer.children).map(card => card.id);
+      localStorage.setItem('cardOrder', JSON.stringify(cards));
+    }
+
+    // Load Card Order from Local Storage
+    function loadCardOrder() {
+      const savedOrder = JSON.parse(localStorage.getItem('cardOrder'));
+      if (savedOrder) {
+        savedOrder.forEach(id => {
+          const card = document.getElementById(id);
+          if (card) cardContainer.appendChild(card);
+        });
+      }
+    }
+
+    // Drag Counter
+    let dragCount = 0;
+    const dragCounter = document.getElementById('dragCounter');
+
+    function updateDragCounter() {
+      dragCount++;
+      dragCounter.textContent = dragCount;
+    }
+
+    // Dark Mode Toggle
+    const darkModeToggle = document.getElementById('darkModeToggle');
+    const body = document.body;
+
+    darkModeToggle.addEventListener('click', () => {
+      body.classList.toggle('dark-mode');
+      darkModeToggle.textContent = body.classList.contains('dark-mode') ? 'حالت روشن' : 'حالت تاریک';
+      playSound();
+    });
+
+    // Lazy Loading Images
+    document.addEventListener('DOMContentLoaded', () => {
+      const lazyImages = document.querySelectorAll('.lazy');
+      const observer = new IntersectionObserver((entries, observer) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            const img = entry.target;
+            img.src = img.dataset.src;
+            img.onload = () => img.classList.add('loaded');
+            observer.unobserve(img);
+          }
+        });
+      });
+      lazyImages.forEach(img => observer.observe(img));
+    });
+
+    // Load Order on Page Load
+    window.addEventListener('load', () => {
+      loadCardOrder();
+    });
+  </script>
+</body>
+</html>
