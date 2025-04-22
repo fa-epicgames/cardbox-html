@@ -230,13 +230,13 @@
     <div class="card" draggable="true" id="card1">
       <div class="card-image-container">
         <!-- Return Button -->
-        <button class="return-button" onclick="restoreImage('cardImage1', 'https://github.com/fa-epicgames/cardbox-html/blob/main/img/hl2.jpg')">
+        <button class="return-button" onclick="restoreImage('cardImage1', 'https://raw.githubusercontent.com/fa-epicgames/cardbox-html/refs/heads/main/img/hl2.jpg')">
           &#8630;
         </button>
         <!-- Loading Spinner -->
         <div class="loading-spinner"></div>
         <!-- Main Image (Lazy Loaded) -->
-        <img data-src="https://github.com/fa-epicgames/cardbox-html/blob/main/img/hl1.jpg" 
+        <img data-src="https://raw.githubusercontent.com/fa-epicgames/cardbox-html/refs/heads/main/img/hl1.jpg" 
              class="card-img-top lazy" alt="تصویر نمونه" onload="showImage(this)">
       </div>
       <div class="card-body">
@@ -253,13 +253,13 @@
     <div class="card" draggable="true" id="card2">
       <div class="card-image-container">
         <!-- Return Button -->
-        <button class="return-button" onclick="restoreImage('cardImage2', 'https://github.com/fa-epicgames/cardbox-html/blob/main/img/hl2.jpg')">
+        <button class="return-button" onclick="restoreImage('cardImage2', 'https://raw.githubusercontent.com/fa-epicgames/cardbox-html/refs/heads/main/img/gw2.jpg')">
           &#8630;
         </button>
         <!-- Loading Spinner -->
         <div class="loading-spinner"></div>
         <!-- Main Image (Lazy Loaded) -->
-        <img data-src="https://github.com/fa-epicgames/cardbox-html/blob/main/img/hl1.jpg" 
+        <img data-src="https://raw.githubusercontent.com/fa-epicgames/cardbox-html/refs/heads/main/img/gw1.jpg" 
              class="card-img-top lazy" alt="تصویر نمونه" onload="showImage(this)">
       </div>
       <div class="card-body">
@@ -310,8 +310,8 @@
     }
 
     // Setup Hover for Both Cards
-    setupCardHover('changeImageButton1', 'cardImage1', 'https://github.com/fa-epicgames/cardbox-html/blob/main/img/gw1.jpg?width=814');
-    setupCardHover('changeImageButton2', 'cardImage2', 'https://github.com/fa-epicgames/cardbox-html/blob/main/img/gw2.jpg?width=814');
+    setupCardHover('changeImageButton1', 'cardImage1', 'https://raw.githubusercontent.com/fa-epicgames/cardbox-html/refs/heads/main/img/hl2.jpg?width=814');
+    setupCardHover('changeImageButton2', 'cardImage2', 'https://raw.githubusercontent.com/fa-epicgames/cardbox-html/refs/heads/main/img/gw2.jpg?width=814');
 
     // Drag and Drop Functionality
     const cardContainer = document.getElementById('cardContainer');
