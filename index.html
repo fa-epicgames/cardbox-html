@@ -32,7 +32,7 @@
 
     /* Dark Mode Styles */
     .dark-mode {
-      background-color: #121212;
+      background-color: #333;
       color: #ffffff;
     }
     .dark-mode .card {
@@ -222,7 +222,7 @@
   <p style="position: absolute; top: 60px; right: 20px;">تعداد جابجایی: <span id="dragCounter">0</span></p>
 
   <!-- Audio Element for Click Sound -->
-  <audio id="clickSound" src="https://www.soundjay.com/button/beep-07.wav" preload="auto"></audio>
+  <audio id="clickSound" src="sound/beep-01.wav" preload="auto"></audio>
 
   <!-- Card Container -->
   <div class="card-container" id="cardContainer">
@@ -230,13 +230,13 @@
     <div class="card" draggable="true" id="card1">
       <div class="card-image-container">
         <!-- Return Button -->
-        <button class="return-button" onclick="restoreImage('cardImage1', 'https://raw.githubusercontent.com/fa-epicgames/cardbox-html/refs/heads/main/img/hl2.jpg')">
+        <button class="return-button" onclick="restoreImage('cardImage1', 'img/img11.jpg')">
           &#8630;
         </button>
         <!-- Loading Spinner -->
         <div class="loading-spinner"></div>
         <!-- Main Image (Lazy Loaded) -->
-        <img data-src="https://raw.githubusercontent.com/fa-epicgames/cardbox-html/refs/heads/main/img/hl1.jpg" 
+        <img data-src="img/img12.jpg" 
              class="card-img-top lazy" alt="تصویر نمونه" onload="showImage(this)">
       </div>
       <div class="card-body">
@@ -253,13 +253,13 @@
     <div class="card" draggable="true" id="card2">
       <div class="card-image-container">
         <!-- Return Button -->
-        <button class="return-button" onclick="restoreImage('cardImage2', 'https://raw.githubusercontent.com/fa-epicgames/cardbox-html/refs/heads/main/img/gw2.jpg')">
+        <button class="return-button" onclick="restoreImage('cardImage2', 'img/img21.jpg')">
           &#8630;
         </button>
         <!-- Loading Spinner -->
         <div class="loading-spinner"></div>
         <!-- Main Image (Lazy Loaded) -->
-        <img data-src="https://raw.githubusercontent.com/fa-epicgames/cardbox-html/refs/heads/main/img/gw1.jpg" 
+        <img data-src="img/img22.jpg" 
              class="card-img-top lazy" alt="تصویر نمونه" onload="showImage(this)">
       </div>
       <div class="card-body">
@@ -310,8 +310,8 @@
     }
 
     // Setup Hover for Both Cards
-    setupCardHover('changeImageButton1', 'cardImage1', 'https://raw.githubusercontent.com/fa-epicgames/cardbox-html/refs/heads/main/img/hl2.jpg?width=814');
-    setupCardHover('changeImageButton2', 'cardImage2', 'https://raw.githubusercontent.com/fa-epicgames/cardbox-html/refs/heads/main/img/gw2.jpg?width=814');
+    setupCardHover('changeImageButton1', 'cardImage1', 'img/img12.jpg?width=814');
+    setupCardHover('changeImageButton2', 'cardImage2', 'img/img21.jpg?width=814');
 
     // Drag and Drop Functionality
     const cardContainer = document.getElementById('cardContainer');
